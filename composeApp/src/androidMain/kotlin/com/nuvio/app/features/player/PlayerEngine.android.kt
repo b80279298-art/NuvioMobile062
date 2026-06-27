@@ -1,3 +1,4 @@
+
 package com.nuvio.app.features.player
 
 import android.app.Activity
@@ -359,6 +360,7 @@ private fun ExoPlayerSurface(
 
         // --- VINCULA O EXOPLAYER ATIVO NA NOSSA PONTE ---
         PlayerAudioInjector.activeExoPlayer = player
+        PlayerAudioInjector.applicationContext = context.applicationContext
         // ------------------------------------------------
 
         player
