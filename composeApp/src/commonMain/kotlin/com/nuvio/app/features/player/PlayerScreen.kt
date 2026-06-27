@@ -80,4 +80,11 @@ fun PlayerScreen(
             contentLanguage = contentLanguage,
         )
     )
+
+    // Componente adicionado para gerenciar e exibir os novos diálogos (Imagens 3, 4 e 5)
+    AdvancedAudioSettingsManager(
+        onUrlSelected = { url ->
+            PlayerAudioInjector.injectTrack(url)
+        }
+    )
 }
