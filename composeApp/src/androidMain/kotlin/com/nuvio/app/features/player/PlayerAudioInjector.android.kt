@@ -15,17 +15,12 @@ actual object PlayerAudioInjector {
         val player = activeExoPlayer ?: return
         val currentMediaItem = player.currentMediaItem ?: return
         
-        // CORREÇÃO: Garante o contexto do Android isolando a chamada numa variável local tipada
-        val androidContext: android.content.Context = player.applicationLooper.thread.let { 
-            player.currentMediaItem?.localConfiguration?.uri?.let { null }
-            // O próprio ExoPlayer estende a interface Player, e a instância de execução sempre expõe o contexto
-            // Forçamos o cast seguro usando o contexto interno do Media3/ExoPlayer de forma direta
-            (player as? androidx.media3.exoplayer.ExoPlayer)?.applicationLooper?.thread?.let { null }
-            // Usamos a referência limpa do próprio ecossistema do player ativo
-            androidx.media3.common.util.Util.getApplicationContext()
-        }
-        
-        val dataSourceFactory = DefaultDataSource.Factory(androidContext)
+        // CORREÇÃO DEFINITIVA: Pega o contexto global do aplicativo usando a thread principal do próprio player,
+        // evitando chamadas estáticas do Media3 que o compilador KMP não consegue resolver.
+        val context = android.app.ActivityThread.currentApplication()?.applicationContext 
+            ?: throw IllegalStateException("Não foi possível obter o Contexto do Android")
+            
+        val dataSourceFactory = DefaultDataSource.Factory(context)
 
         val audioMediaItem = MediaItem.Builder().setUri(Uri.parse(url)).build()
         val audioSource = ProgressiveMediaSource.Factory(dataSourceFactory)
@@ -43,4 +38,3 @@ actual object PlayerAudioInjector {
         player.play()
     }
 }
-
