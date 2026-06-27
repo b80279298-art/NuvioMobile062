@@ -1,3 +1,4 @@
+
 name: Build APK
 
 on:
@@ -20,13 +21,14 @@ jobs:
         run: chmod +x gradlew
 
       - name: Build APK
+        # Adicionado o parâmetro obrigatório do seu projeto (-Pnuvio.android.distribution=full)
         run: |
-          ./gradlew assembleDebug
+          ./gradlew assembleDebug -Pnuvio.android.distribution=full
           find . -name "*.apk" -o -name "*.aab"
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: app-debug
-          path: 'app/build/outputs/apk/**/*.apk'
-
+          # Ajustado de 'app/' para 'composeApp/' baseado nos logs do seu Gradle
+          path: 'composeApp/build/outputs/apk/**/*.apk'
