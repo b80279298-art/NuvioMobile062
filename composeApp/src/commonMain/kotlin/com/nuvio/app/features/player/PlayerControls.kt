@@ -564,6 +564,17 @@ private fun ProgressControls(
                         painter = audioPainter,
                         onClick = onAudioClick,
                     )
+                    
+                    // --- NOSSO BOTÃO ADICIONADO AQUI ---
+                    PlayerActionPillButton(
+                        label = "Mais Opções",
+                        icon = Icons.Rounded.Build,
+                        onClick = { 
+                            AudioMenuController.currentStep = AudioSettingsStep.OPTIONS 
+                        }
+                    )
+                    // ------------------------------------
+
                     if (onSourcesClick != null) {
                         PlayerActionPillButton(
                             label = stringResource(Res.string.compose_player_sources),
